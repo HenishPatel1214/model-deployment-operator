@@ -1,0 +1,43 @@
+apiVersion: ai.platform.dev/v1alpha1
+kind: ModelDeployment
+metadata:
+  name: llama-demo
+spec:
+  provider: ollama
+  modelName: llama3
+  image: ollama/ollama:latest
+  replicas: 1
+  resources:
+    cpu: "2"
+    memory: "4Gi"
+    gpu: 0
+  service:
+    type: ClusterIP
+    port: 11434
+  ingress:
+    enabled: false
+    host: llama.local
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  observability:
+    enabled: true
+    prometheus: true
+    openTelemetry: false
+  benchmark:
+    enabled: true
+    samplePrompt: "Explain Kubernetes operators in simple terms."
+    requests: 20
+    concurrency: 2
+  rag:
+    enabled: false
+    vectorDatabase:
+      provider: qdrant
+      image: qdrant/qdrant:latest
+  secrets:
+    modelRegistrySecretName: ""
+    apiTokenSecretName: ""
+    providerKeySecretName: ""

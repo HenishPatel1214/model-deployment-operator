@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+          cache: true
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.15.4
+
+      - name: Format check
+        run: make fmt-check
+
+      - name: Generate manifests
+        run: make manifests
+
+      - name: Vet
+        run: make vet
+
+      - name: Test with envtest
+        run: make test
+
+      - name: Build controller and benchmark
+        run: make build
+
+      - name: Docker build
+        run: make docker-build
+
+      - name: Helm lint
+        run: make helm-lint
+
+      - name: YAML validation
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: config examples gitops observability

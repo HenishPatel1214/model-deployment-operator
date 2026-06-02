@@ -1,0 +1,21 @@
+apiVersion: ai.platform.dev/v1alpha1
+kind: ModelDeployment
+metadata:
+  name: vllm-basic
+spec:
+  provider: vllm
+  modelName: facebook/opt-125m
+  image: vllm/vllm-openai:latest
+  replicas: 1
+  resources:
+    cpu: "2"
+    memory: "6Gi"
+    gpu: 0
+  service:
+    type: ClusterIP
+    port: 8000
+  autoscaling:
+    enabled: false
+  observability:
+    enabled: true
+    prometheus: true

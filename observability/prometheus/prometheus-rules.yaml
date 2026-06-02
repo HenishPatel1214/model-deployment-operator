@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: model-deployment-operator-alerts
+  labels:
+    app.kubernetes.io/name: model-deployment-operator
+spec:
+  groups:
+    - name: model-deployment-operator.rules
+      rules:
+        - alert: ModelDeploymentFailed
+          expr: model_deployment_status{phase="Failed"} == 1
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "ModelDeployment {{ $labels.namespace }}/{{ $labels.modeldeployment }} is failed"
+            description: "The operator reports a Failed phase. Inspect status conditions and child pods."
+        - alert: ModelDeploymentHighErrorRate
+          expr: |
+            sum(rate(model_deployment_errors_total[5m])) by (namespace, modeldeployment)
+            /
+            clamp_min(sum(rate(model_deployment_requests_total[5m])) by (namespace, modeldeployment), 1) > 0.05
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High model inference error rate"
+            description: "Benchmark or application metrics report more than 5 percent errors."

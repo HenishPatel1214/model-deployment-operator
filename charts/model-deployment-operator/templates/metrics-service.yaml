@@ -1,0 +1,17 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "model-deployment-operator.fullname" . }}-metrics
+  labels:
+    {{- include "model-deployment-operator.labels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+spec:
+  selector:
+    app.kubernetes.io/name: {{ include "model-deployment-operator.name" . }}
+    app.kubernetes.io/component: controller-manager
+  ports:
+    - name: metrics
+      port: 8080
+      targetPort: metrics
+{{- end }}

@@ -1,0 +1,58 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-model-service-ingress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: model-deployment
+      app.kubernetes.io/component: inference
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 11434
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-prometheus-scrape
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: model-deployment
+      app.kubernetes.io/component: inference
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+      ports:
+        - protocol: TCP
+          port: 11434
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restrict-qdrant-to-model-pods
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: qdrant
+      app.kubernetes.io/component: vector-db
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: model-deployment
+              app.kubernetes.io/component: inference
+      ports:
+        - protocol: TCP
+          port: 6333

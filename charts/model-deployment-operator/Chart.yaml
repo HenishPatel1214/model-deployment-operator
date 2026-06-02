@@ -1,0 +1,15 @@
+apiVersion: v2
+name: model-deployment-operator
+description: A Go Kubernetes Operator for managing AI model inference workloads.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - kubernetes
+  - operator
+  - ai
+  - mlops
+  - ollama
+  - vllm
+maintainers:
+  - name: Henish Patel

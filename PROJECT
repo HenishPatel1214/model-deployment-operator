@@ -1,0 +1,16 @@
+domain: platform.dev
+layout:
+- go.kubebuilder.io/v4
+projectName: model-deployment-operator
+repo: github.com/HenishPatel1214/model-deployment-operator
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: platform.dev
+  group: ai
+  kind: ModelDeployment
+  path: github.com/HenishPatel1214/model-deployment-operator/api/v1alpha1
+  version: v1alpha1
+version: "3"

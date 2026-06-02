@@ -1,0 +1,28 @@
+apiVersion: ai.platform.dev/v1alpha1
+kind: ModelDeployment
+metadata:
+  name: ollama-rag
+spec:
+  provider: ollama
+  modelName: llama3
+  image: ollama/ollama:latest
+  replicas: 1
+  resources:
+    cpu: "2"
+    memory: "4Gi"
+  service:
+    type: ClusterIP
+    port: 11434
+  rag:
+    enabled: true
+    vectorDatabase:
+      provider: qdrant
+      image: qdrant/qdrant:latest
+  benchmark:
+    enabled: true
+    samplePrompt: "Describe how RAG uses a vector database."
+    requests: 10
+    concurrency: 1
+  observability:
+    enabled: true
+    prometheus: true

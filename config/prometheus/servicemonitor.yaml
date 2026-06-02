@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: model-deployment-operator
+  namespace: model-deployment-operator-system
+  labels:
+    app.kubernetes.io/name: model-deployment-operator
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: model-deployment-operator
+      app.kubernetes.io/component: metrics
+  namespaceSelector:
+    matchNames:
+      - model-deployment-operator-system
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s

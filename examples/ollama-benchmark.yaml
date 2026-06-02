@@ -1,0 +1,23 @@
+apiVersion: ai.platform.dev/v1alpha1
+kind: ModelDeployment
+metadata:
+  name: ollama-benchmark
+spec:
+  provider: ollama
+  modelName: llama3
+  image: ollama/ollama:latest
+  replicas: 1
+  resources:
+    cpu: "2"
+    memory: "4Gi"
+  service:
+    type: ClusterIP
+    port: 11434
+  benchmark:
+    enabled: true
+    samplePrompt: "Explain Kubernetes operators in simple terms."
+    requests: 20
+    concurrency: 2
+  observability:
+    enabled: true
+    prometheus: true

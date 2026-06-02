@@ -1,0 +1,16 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: ollama-token-throughput
+spec:
+  scaleTargetRef:
+    name: ollama-autoscaling
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-kube-prometheus-prometheus.monitoring.svc:9090
+        metricName: model_deployment_requests_total
+        query: sum(rate(model_deployment_requests_total{modeldeployment="ollama-autoscaling"}[1m]))
+        threshold: "20"

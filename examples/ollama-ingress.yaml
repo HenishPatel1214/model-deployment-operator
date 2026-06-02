@@ -1,0 +1,22 @@
+apiVersion: ai.platform.dev/v1alpha1
+kind: ModelDeployment
+metadata:
+  name: ollama-ingress
+spec:
+  provider: ollama
+  modelName: llama3
+  image: ollama/ollama:latest
+  replicas: 1
+  resources:
+    cpu: "1"
+    memory: "2Gi"
+  service:
+    type: ClusterIP
+    port: 11434
+  ingress:
+    enabled: true
+    host: llama.local
+    tls: false
+  observability:
+    enabled: true
+    prometheus: true

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: model-deployment-operator-egress
+  namespace: model-deployment-operator-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: model-deployment-operator
+      app.kubernetes.io/component: controller-manager
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 443
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 8080

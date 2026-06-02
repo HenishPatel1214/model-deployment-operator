@@ -1,0 +1,17 @@
+# Binaries and build output
+bin/
+dist/
+*.out
+coverage.*
+
+# Local clusters and editor state
+.DS_Store
+.idea/
+.vscode/
+
+# Envtest assets
+testbin/
+
+# Generated demo output
+tmp/
+*.log
