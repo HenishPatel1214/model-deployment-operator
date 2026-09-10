@@ -1,0 +1,10 @@
+extends: default
+
+rules:
+  # Kubernetes manifests commonly omit an explicit document marker.
+  document-start: disable
+  # Generated CRDs and PromQL expressions contain intentionally long lines.
+  line-length: disable
+  # Accept both common YAML sequence styles while checking consistency.
+  indentation:
+    indent-sequences: consistent
